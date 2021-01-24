@@ -35,6 +35,8 @@ export default function SP500()
 {
     const [data, setData] = useState();
     const [loading, setLoading] = useState(false);
+    const [smaSmall, setSmaSmall] = useState(0);
+    const [smaLarge, setSmaLarge] = useState(0);
     const [dayRangeString, setDayRangeString] = useState('Half a year');
     const [error, setError] = useState('');
 
@@ -45,6 +47,9 @@ export default function SP500()
 
     return (
         <React.Fragment>
+            {smaLarge && smaLarge && smaSmall > smaLarge && <h1 style={{ color: 'lime' }}>  HEALTHY </h1>}
+
+            {smaLarge && smaLarge && smaSmall <= smaLarge && <h1 style={{ color: 'red' }}>  SICK </h1>}
 
             {loading && <h3 style={{ color: 'white', paddingBottom: '10px' }}>Loading...</h3>}
 
@@ -53,8 +58,7 @@ export default function SP500()
                 <Button variant="primary" onClick={() => fetchData('6 Months', 180)}>Refresh</Button>
             </div>}
 
-            {data && <div style={{ paddingLeft: 20, paddingRight: 20, backgroundColor: 'black', width: '100%', textAlign: 'center' }}>
-
+            {data && <div style={{ backgroundColor: 'black', width: '100%', textAlign: 'center', paddingTop: 10 }}>
                 <Dropdown>
                     <Dropdown.Toggle variant="primary" id="dropdown-basic">
                         {dayRangeString}
@@ -74,6 +78,7 @@ export default function SP500()
                     type="line"
                     height="500"
                 />
+
             </div>}
 
         </React.Fragment>
@@ -101,6 +106,8 @@ export default function SP500()
         }
 
         setDayRangeString(rangeString)
+        setSmaSmall(Number(sma50[0].ma))
+        setSmaLarge(Number(sma100[0].ma))
         const chartData = {
 
             options: {
@@ -119,6 +126,7 @@ export default function SP500()
                     labels: {
                         hideOverlappingLabels: true,
                         offsetX: 20,
+                        offsetY: -3,
                         style: {
                             colors: 'white'
                         }
@@ -161,8 +169,7 @@ export default function SP500()
                     floating: true,
                     labels: {
                         colors: 'white'
-                    },
-
+                    }
                 }
             },
             series: [
