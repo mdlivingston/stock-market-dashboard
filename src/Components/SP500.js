@@ -35,8 +35,8 @@ export default function SP500()
 {
     const [data, setData] = useState();
     const [loading, setLoading] = useState(false);
-    const [smaSmall, setSmaSmall] = useState(0);
-    const [smaLarge, setSmaLarge] = useState(0);
+    const [smaSmall, setSmaSmall] = useState();
+    const [smaLarge, setSmaLarge] = useState();
     const [dayRangeString, setDayRangeString] = useState('Half a year');
     const [error, setError] = useState('');
 
