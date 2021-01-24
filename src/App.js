@@ -5,7 +5,7 @@ export default function App()
 {
   return (
     <div className="container">
-      <h3 className="header">STOCK MARKET HEALTH DASHBOARD</h3>
+      <h3 className="header">ECONOMY HEALTH</h3>
       <div className="flex-r">
         <div className="inner"></div>
         <div className="inner"></div>

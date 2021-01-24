@@ -139,7 +139,7 @@ export default function SP500()
                         offsetX: 5,
                         offsetY: 0
                     },
-                    tickAmount: 20
+                    tickAmount: 10
                 },
                 stroke: {
                     show: true,
