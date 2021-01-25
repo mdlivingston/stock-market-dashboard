@@ -15,7 +15,7 @@ async function fetchStock(dayRange)
 {
 
     const result = await axios(
-        `https://api.twelvedata.com/time_series?symbol=GSPC&interval=1day&apikey=${process.env.REACT_APP_STOCK_API_KEY}&source=doc&start_date=${getPreviousDate(dayRange).toISOString()}`,
+        `https://api.twelvedata.com/time_series?symbol=GSPC&interval=1day&apikey=${process.env.REACT_APP_STOCK_API_KEY}&time_period=${dayRange}&outputsize=${dayRange}`,
     );
     console.log(result.data.values)
     return result.data.values ? result.data.values : result.data;
@@ -25,7 +25,7 @@ async function fetchSMA(interval, dayRange)
 {
 
     const result = await axios(
-        `https://api.twelvedata.com/ma?symbol=GSPC&interval=1day&apikey=${process.env.REACT_APP_STOCK_API_KEY}&source=doc&start_date=${getPreviousDate(dayRange).toISOString()}&time_period=${interval}`,
+        `https://api.twelvedata.com/sma?symbol=GSPC&interval=1day&apikey=${process.env.REACT_APP_STOCK_API_KEY}&time_period=${interval}&outputsize=${dayRange}`,
     );
     console.log(result.data.values)
     return result.data.values;
@@ -106,8 +106,8 @@ export default function SP500()
         }
 
         setDayRangeString(rangeString)
-        setSmaSmall(Number(sma50[0].ma))
-        setSmaLarge(Number(sma100[0].ma))
+        setSmaSmall(Number(sma50[0].sma))
+        setSmaLarge(Number(sma100[0].sma))
         const chartData = {
 
             options: {
@@ -180,11 +180,11 @@ export default function SP500()
                 },
                 {
                     name: "50 SMA",
-                    data: sma50.map(v => Number(v.ma)).reverse()
+                    data: sma50.map(v => Number(v.sma)).reverse()
                 },
                 {
                     name: "100 SMA",
-                    data: sma100.map(v => Number(v.ma)).reverse()
+                    data: sma100.map(v => Number(v.sma)).reverse()
                 }
             ],
         };

@@ -12,14 +12,14 @@ body {
 }
 
 .flex-r {
-  height: 50px;
+  /* height: 50px; */
   display: flex;
   justify-content: space-evenly;
 }
 
 .inner {
-  height: 250px;
-  width: 250px;
+  /* height: 250px;
+  width: 250px; */
 }
 
 .content {
