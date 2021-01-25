@@ -24,7 +24,7 @@ def main(request):
     yearArray = []
     for h3 in mainSoup:
         print(h3.text)
-        yearArray.append(h3.text)
+        yearArray.append(h3.text.replace(' ', ''))
 
     mainSoup = soup.findAll(
         "td", attrs={"class": ["data", "label"]})
@@ -42,7 +42,13 @@ def main(request):
     mainArray.append(yearArray)
     mainArray.append(dataArray)
 
-    return jsonify(mainArray)
+    # Set CORS headers for the main request
+    headers = {
+        'Access-Control-Allow-Origin': '*'
+    }
+
+
+    return (jsonify(mainArray), 200, headers)
 
 
 #arr = indicators()

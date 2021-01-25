@@ -11,9 +11,17 @@ function getPreviousDate(subtractedDays)
     return date;
 }
 
+async function fetchBBands(dayRange)
+{
+    const result = await axios(
+        `https://api.twelvedata.com/bbands?symbol=GSPC&interval=1day&apikey=${process.env.REACT_APP_STOCK_API_KEY}&time_period=${dayRange}&outputsize=${dayRange}`,
+    );
+    console.log(result.data.values)
+    return result.data.values ? result.data.values : result.data;
+}
+
 async function fetchStock(dayRange)
 {
-
     const result = await axios(
         `https://api.twelvedata.com/time_series?symbol=GSPC&interval=1day&apikey=${process.env.REACT_APP_STOCK_API_KEY}&time_period=${dayRange}&outputsize=${dayRange}`,
     );
@@ -23,7 +31,6 @@ async function fetchStock(dayRange)
 
 async function fetchSMA(interval, dayRange)
 {
-
     const result = await axios(
         `https://api.twelvedata.com/sma?symbol=GSPC&interval=1day&apikey=${process.env.REACT_APP_STOCK_API_KEY}&time_period=${interval}&outputsize=${dayRange}`,
     );
@@ -89,6 +96,7 @@ export default function SP500()
         setLoading(true)
         const stockData = await fetchStock(range);
 
+
         if (stockData.message)
         {
             setError(stockData.message)
@@ -96,10 +104,11 @@ export default function SP500()
             return
         }
 
+        const bBands = await fetchBBands(range);
         const sma50 = await fetchSMA(50, range);
-        const sma100 = await fetchSMA(100, range);
+        const sma100 = await fetchSMA(200, range);
 
-        if (!sma50 || !sma100)
+        if (!sma50 || !sma100 | !bBands)
         {
             setLoading(false)
             return
@@ -146,8 +155,8 @@ export default function SP500()
                     curve: 'smooth',
                     lineCap: 'butt',
                     colors: undefined,
-                    width: 2,
-                    dashArray: 0,
+                    width: [3, 2, 2, 1, 1, 1],
+                    dashArray: [0, 0, 0, 5, 5, 5]
                 },
                 yaxis: [{
 
@@ -183,8 +192,20 @@ export default function SP500()
                     data: sma50.map(v => Number(v.sma)).reverse()
                 },
                 {
-                    name: "100 SMA",
+                    name: "200 SMA",
                     data: sma100.map(v => Number(v.sma)).reverse()
+                },
+                {
+                    name: "Upper Band",
+                    data: bBands.map(v => Number(v.upper_band)).reverse()
+                },
+                {
+                    name: "Mid Band",
+                    data: bBands.map(v => Number(v.middle_band)).reverse()
+                },
+                {
+                    name: "Lower Band",
+                    data: bBands.map(v => Number(v.lower_band)).reverse()
                 }
             ],
         };

@@ -1,5 +1,14 @@
 .box {
     height: 250px;
-    width: 250px;
+    width: 350px;
     border: 1px solid limegreen;
+    color: white;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    margin-bottom: 20px;
 }

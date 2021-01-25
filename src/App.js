@@ -2,7 +2,7 @@ import './App.css';
 import Box from './Components/Box';
 import SP500 from './Components/SP500';
 import axios from 'axios';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 
 
@@ -12,15 +12,21 @@ async function fetchIndicators()
 	const result = await axios(
 		`https://us-central1-gaugemarkethealth.cloudfunctions.net/indicators`,
 	);
-	console.log(result.data.values)
-	return result.data.values ? result.data.values : result.data;
+	console.log(result.data)
+	return result.data ? result.data : result.message;
 }
 
 export default function App()
 {
+	const [mainIndicators, setMainIndicators] = useState([])
+
 	useEffect(() =>
 	{
-		//fetchIndicators();
+		async function assignIndicators()
+		{
+			setMainIndicators(await fetchIndicators());
+		}
+		assignIndicators();
 	}, []);
 
 
@@ -28,8 +34,14 @@ export default function App()
 		<div className="container">
 			<h3 className="header">ECONOMY HEALTH</h3>
 			<div className="flex-r">
-				{/* <Box className="inner"></Box>
-				<Box className="inner"></Box> */}
+				<Box
+					title={'GrossDomesticProduct'}
+					valueChange={mainIndicators.length > 0 ? mainIndicators[2][0] : ''}
+					metaValue={mainIndicators.length > 0 ? mainIndicators[2][1] : ''} className="inner"></Box>
+				<Box
+					title={'New Residential Construction'}
+					valueChange={mainIndicators.length > 0 ? mainIndicators[2][4] : ''}
+					metaValue={mainIndicators.length > 0 ? mainIndicators[2][5] : ''} className="inner"></Box>
 			</div>
 			<div className="content">
 				<SP500 className={'card'}></SP500>
