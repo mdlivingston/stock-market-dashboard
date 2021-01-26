@@ -49,7 +49,7 @@ export default function SP500()
 
     useEffect(() =>
     {
-        fetchData('6 Months', 180);
+        fetchData('1 Year', 365);
     }, []);
 
     return (
