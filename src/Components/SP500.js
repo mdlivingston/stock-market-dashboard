@@ -14,7 +14,7 @@ function getPreviousDate(subtractedDays)
 async function fetchBBands(dayRange)
 {
     const result = await axios(
-        `https://api.twelvedata.com/bbands?symbol=GSPC&interval=1day&apikey=${process.env.REACT_APP_STOCK_API_KEY}&time_period=${dayRange}&outputsize=${dayRange}`,
+        `https://api.twelvedata.com/bbands?symbol=SPX&interval=1day&apikey=${process.env.REACT_APP_STOCK_API_KEY}&outputsize=${dayRange}&order=ASC`,
     );
     console.log(result.data.values)
     return result.data.values ? result.data.values : result.data;
@@ -23,7 +23,7 @@ async function fetchBBands(dayRange)
 async function fetchStock(dayRange)
 {
     const result = await axios(
-        `https://api.twelvedata.com/time_series?symbol=GSPC&interval=1day&apikey=${process.env.REACT_APP_STOCK_API_KEY}&time_period=${dayRange}&outputsize=${dayRange}`,
+        `https://api.twelvedata.com/time_series?symbol=SPX&interval=1day&apikey=${process.env.REACT_APP_STOCK_API_KEY}&outputsize=${dayRange}&order=ASC`,
     );
     console.log(result.data.values)
     return result.data.values ? result.data.values : result.data;
@@ -32,7 +32,7 @@ async function fetchStock(dayRange)
 async function fetchSMA(interval, dayRange)
 {
     const result = await axios(
-        `https://api.twelvedata.com/sma?symbol=GSPC&interval=1day&apikey=${process.env.REACT_APP_STOCK_API_KEY}&time_period=${interval}&outputsize=${dayRange}`,
+        `https://api.twelvedata.com/sma?symbol=SPX&interval=1day&apikey=${process.env.REACT_APP_STOCK_API_KEY}&time_period=${interval}&outputsize=${dayRange}&order=ASC`,
     );
     console.log(result.data.values)
     return result.data.values;
@@ -54,9 +54,7 @@ export default function SP500()
 
     return (
         <React.Fragment>
-            {smaLarge && smaLarge && smaSmall > smaLarge && <h1 style={{ color: 'lime' }}>  HEALTHY </h1>}
 
-            {smaLarge && smaLarge && smaSmall <= smaLarge && <h1 style={{ color: 'red' }}>  SICK </h1>}
 
             {loading && <h3 style={{ color: 'white', paddingBottom: '10px' }}>Loading...</h3>}
 
@@ -75,7 +73,7 @@ export default function SP500()
                         <Dropdown.Item onClick={() => fetchData('6 Months', 180)}>6 Months</Dropdown.Item>
                         <Dropdown.Item onClick={() => fetchData('1 Year', 365)}>1 Year</Dropdown.Item>
                         <Dropdown.Item onClick={() => fetchData('2 Years', 700)}>2 years</Dropdown.Item>
-                        <Dropdown.Item onClick={() => fetchData('5 Years', 1825)}>5 Years</Dropdown.Item>
+                        {/* <Dropdown.Item onClick={() => fetchData('5 Years', 1825)}>5 Years</Dropdown.Item> */}
                     </Dropdown.Menu>
                 </Dropdown>
                 <br></br>
@@ -87,6 +85,10 @@ export default function SP500()
                 />
 
             </div>}
+
+            {smaLarge && smaLarge && smaSmall > smaLarge && <h1 style={{ color: 'lime' }}>  HEALTHY </h1>}
+
+            {smaLarge && smaLarge && smaSmall <= smaLarge && <h1 style={{ color: 'red' }}>  SICK </h1>}
 
         </React.Fragment>
     );
@@ -115,8 +117,8 @@ export default function SP500()
         }
 
         setDayRangeString(rangeString)
-        setSmaSmall(Number(sma50[0].sma))
-        setSmaLarge(Number(sma100[0].sma))
+        setSmaSmall(Number(sma50[sma50.length - 1].sma))
+        setSmaLarge(Number(sma100[sma100.length - 1].sma))
         const chartData = {
 
             options: {
@@ -131,7 +133,7 @@ export default function SP500()
                     id: "basic-line"
                 },
                 xaxis: {
-                    categories: stockData.map(dates => dates.datetime).reverse(),
+                    categories: stockData.map(dates => dates.datetime),
                     labels: {
                         hideOverlappingLabels: true,
                         offsetX: 20,
@@ -154,12 +156,11 @@ export default function SP500()
                     show: true,
                     curve: 'smooth',
                     lineCap: 'butt',
-                    colors: undefined,
-                    width: [3, 2, 2, 1, 1, 1],
-                    dashArray: [0, 0, 0, 5, 5, 5]
+                    width: [3, 2, 2, 1, 1],
+                    dashArray: [0, 0, 0, 5, 5]
                 },
+                colors: ['#06c804', '#0000ff', '#ff3d00', '#FFF', '#FFF'],
                 yaxis: [{
-
                     labels: {
                         formatter: function (val)
                         {
@@ -184,28 +185,28 @@ export default function SP500()
             series: [
                 {
                     name: "Close",
-                    data: stockData.map(v => Number(v.close)).reverse(),
+                    data: stockData.map(v => Number(v.close)),
 
                 },
                 {
                     name: "50 SMA",
-                    data: sma50.map(v => Number(v.sma)).reverse()
+                    data: sma50.map(v => Number(v.sma))
                 },
                 {
                     name: "200 SMA",
-                    data: sma100.map(v => Number(v.sma)).reverse()
+                    data: sma100.map(v => Number(v.sma))
                 },
                 {
                     name: "Upper Band",
-                    data: bBands.map(v => Number(v.upper_band)).reverse()
+                    data: bBands.map(v => Number(v.upper_band))
                 },
-                {
-                    name: "Mid Band",
-                    data: bBands.map(v => Number(v.middle_band)).reverse()
-                },
+                // {
+                //     name: "Mid Band",
+                //     data: bBands.map(v => Number(v.middle_band))
+                // },
                 {
                     name: "Lower Band",
-                    data: bBands.map(v => Number(v.lower_band)).reverse()
+                    data: bBands.map(v => Number(v.lower_band))
                 }
             ],
         };
