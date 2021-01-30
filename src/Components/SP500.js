@@ -86,9 +86,9 @@ export default function SP500()
 
             </div>}
 
-            {smaLarge && smaLarge && smaSmall > smaLarge && <h1 style={{ color: 'lime' }}>  HEALTHY </h1>}
+            {/* {smaLarge && smaLarge && smaSmall > smaLarge && <h1 style={{ color: 'lime' }}>  HEALTHY </h1>}
 
-            {smaLarge && smaLarge && smaSmall <= smaLarge && <h1 style={{ color: 'red' }}>  SICK </h1>}
+            {smaLarge && smaLarge && smaSmall <= smaLarge && <h1 style={{ color: 'red' }}>  SICK </h1>} */}
 
         </React.Fragment>
     );
@@ -123,9 +123,10 @@ export default function SP500()
 
             options: {
                 title: {
-                    text: 'S&P 500',
+                    text: `S&P 500: $${Number(stockData[stockData.length - 1].close).toFixed(0)}`,
                     style: {
-                        color: 'white'
+                        color: 'white',
+                        fontSize: '22px'
                     },
                     align: 'center'
                 },

@@ -18,30 +18,30 @@ async function fetchIndicators()
 
 export default function App()
 {
-	const [mainIndicators, setMainIndicators] = useState([])
+	//const [mainIndicators, setMainIndicators] = useState([])
 
-	useEffect(() =>
-	{
-		async function assignIndicators()
-		{
-			setMainIndicators(await fetchIndicators());
-		}
-		assignIndicators();
-	}, []);
+	// useEffect(() =>
+	// {
+	// 	async function assignIndicators()
+	// 	{
+	// 		setMainIndicators(await fetchIndicators());
+	// 	}
+	// 	assignIndicators();
+	// }, []);
 
 
 	return (
 		<div className="container">
-			<h3 className="header">ECONOMY HEALTH</h3>
+			<h3 className="header">MARKET HEALTH</h3>
 			<div className="flex-r">
-				<Box
+				{/* <Box
 					title={'GrossDomesticProduct'}
 					valueChange={mainIndicators.length > 0 ? mainIndicators[2][0] : ''}
 					metaValue={mainIndicators.length > 0 ? mainIndicators[2][1] : ''} className="inner"></Box>
 				<Box
 					title={'New Residential Construction'}
 					valueChange={mainIndicators.length > 0 ? mainIndicators[2][4] : ''}
-					metaValue={mainIndicators.length > 0 ? mainIndicators[2][5] : ''} className="inner"></Box>
+					metaValue={mainIndicators.length > 0 ? mainIndicators[2][5] : ''} className="inner"></Box> */}
 			</div>
 			<div className="content">
 				<SP500 className={'card'}></SP500>
