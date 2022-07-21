@@ -3,11 +3,11 @@ import Box from './Components/Box';
 import SP500 from './Components/SP500';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import Canvas from './Components/Canvas';
 
 
 
-async function fetchIndicators()
-{
+async function fetchIndicators() {
 
 	const result = await axios(
 		`https://us-central1-gaugemarkethealth.cloudfunctions.net/indicators`,
@@ -16,8 +16,7 @@ async function fetchIndicators()
 	return result.data ? result.data : result.message;
 }
 
-export default function App()
-{
+export default function App() {
 	//const [mainIndicators, setMainIndicators] = useState([])
 
 	// useEffect(() =>
@@ -45,6 +44,7 @@ export default function App()
 			</div>
 			<div className="content">
 				<SP500 className={'card'}></SP500>
+				<Canvas></Canvas>
 			</div>
 			<div className="flex-r">
 				<div className="inner"></div>

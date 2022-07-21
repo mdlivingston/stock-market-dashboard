@@ -4,15 +4,13 @@ import axios from 'axios';
 import Chart from "react-apexcharts";
 import { Dropdown, Button } from 'react-bootstrap';
 
-function getPreviousDate(subtractedDays)
-{
+function getPreviousDate(subtractedDays) {
     const date = new Date();
     date.setDate(date.getDate() - subtractedDays)
     return date;
 }
 
-async function fetchBBands(dayRange)
-{
+async function fetchBBands(dayRange) {
     const result = await axios(
         `https://api.twelvedata.com/bbands?symbol=SPX&interval=1day&apikey=${process.env.REACT_APP_STOCK_API_KEY}&outputsize=${dayRange}&order=ASC`,
     );
@@ -20,8 +18,7 @@ async function fetchBBands(dayRange)
     return result.data.values ? result.data.values : result.data;
 }
 
-async function fetchStock(dayRange)
-{
+async function fetchStock(dayRange) {
     const result = await axios(
         `https://api.twelvedata.com/time_series?symbol=SPX&interval=1day&apikey=${process.env.REACT_APP_STOCK_API_KEY}&outputsize=${dayRange}&order=ASC`,
     );
@@ -29,8 +26,7 @@ async function fetchStock(dayRange)
     return result.data.values ? result.data.values : result.data;
 }
 
-async function fetchSMA(interval, dayRange)
-{
+async function fetchSMA(interval, dayRange) {
     const result = await axios(
         `https://api.twelvedata.com/sma?symbol=SPX&interval=1day&apikey=${process.env.REACT_APP_STOCK_API_KEY}&time_period=${interval}&outputsize=${dayRange}&order=ASC`,
     );
@@ -38,8 +34,7 @@ async function fetchSMA(interval, dayRange)
     return result.data.values;
 }
 
-export default function SP500()
-{
+export default function SP500() {
     const [data, setData] = useState();
     const [loading, setLoading] = useState(false);
     const [smaSmall, setSmaSmall] = useState();
@@ -47,8 +42,10 @@ export default function SP500()
     const [dayRangeString, setDayRangeString] = useState('Half a year');
     const [error, setError] = useState('');
 
-    useEffect(() =>
-    {
+
+
+
+    useEffect(() => {
         fetchData('1 Year', 365);
     }, []);
 
@@ -93,14 +90,12 @@ export default function SP500()
         </React.Fragment>
     );
 
-    async function fetchData(rangeString, range)
-    {
+    async function fetchData(rangeString, range) {
         setLoading(true)
         const stockData = await fetchStock(range);
 
 
-        if (stockData.message)
-        {
+        if (stockData.message) {
             setError(stockData.message)
             setLoading(false)
             return
@@ -110,8 +105,7 @@ export default function SP500()
         const sma50 = await fetchSMA(50, range);
         const sma100 = await fetchSMA(200, range);
 
-        if (!sma50 || !sma100 | !bBands)
-        {
+        if (!sma50 || !sma100 | !bBands) {
             setLoading(false)
             return
         }
@@ -163,8 +157,7 @@ export default function SP500()
                 colors: ['#06c804', '#0000ff', '#ff3d00', '#FFF', '#FFF'],
                 yaxis: [{
                     labels: {
-                        formatter: function (val)
-                        {
+                        formatter: function (val) {
                             return val.toFixed(0)
                         },
                         style: {
