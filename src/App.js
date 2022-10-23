@@ -44,7 +44,7 @@ export default function App() {
 			</div>
 			<div className="content">
 				<SP500 className={'card'}></SP500>
-				<Canvas></Canvas>
+				{/* <Canvas></Canvas> */}
 			</div>
 			<div className="flex-r">
 				<div className="inner"></div>
